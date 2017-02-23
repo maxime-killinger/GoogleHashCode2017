@@ -91,33 +91,33 @@ void    getEndpoints(Hash &hash, ifstream &file) {
 }
 
 void    getRequests(Hash &hash, ifstream &file) {
-    int                         k = 0;
-    int                         latency, nbCache, i;
+    int                         i = 0;
+    int                         idVideo, idEndpoint, nbReq;
     string                      token;
     string                      buff;
 
-    while (k < hash.nbEndpoints) {
-        getline(file, buff);
+    while (getline(file, buff)) {
         istringstream iss(buff);
         i = 0;
         while (getline(iss, token, ' ')) {
             if (i == 0) {
-                latency = atoi(token.c_str());
+                idVideo = atoi(token.c_str());
             }
             if (i == 1) {
-                nbCache = atoi(token.c_str());
+                idEndpoint = atoi(token.c_str());
+            }
+            if (i == 2) {
+                nbReq = atoi(token.c_str());
             }
             i++;
         }
-        Endpoint    endpoint(k, latency, nbCache);
-        getCacheLatency(endpoint, file);
-        hash.endpoints.push_back(endpoint);
-        k++;
+        Request request(idVideo, nbReq, hash.endpoints[idEndpoint]);
+        hash.videos[idVideo].req.push_back(request);
     }
 }
 
 int getInfos(Hash &hash) {
-    ifstream                    file("../GoogleFiles/kittens.in", ios::in);
+    ifstream                    file("../GoogleFiles/me_at_the_zoo.in", ios::in);
     string                      buff;
 
     if (!file) {
@@ -129,7 +129,7 @@ int getInfos(Hash &hash) {
     getline(file, buff);
     getVideos(hash, buff);
     getEndpoints(hash, file);
-    //getRequests(hash, file);
+    getRequests(hash, file);
     file.close();
     return (0);
 }
@@ -140,7 +140,7 @@ int main() {
     getInfos(hash);
     cout << hash.cacheCapacity << endl;
     cout << hash.videos[1].id << ": " << hash.videos[1].size << " mb" << endl;
-    cout << hash.endpoints[0].latency << " " << hash.endpoints[0].nbCache << endl;
-    cout << hash.endpoints[0].cacheLatency[0].idCache << " " << hash.endpoints[0].cacheLatency[0].latency << endl;
+    cout << hash.endpoints[4].latency << " " << hash.endpoints[4].nbCache << endl;
+    cout << hash.videos[27].req[0].endpoint.latency << " " << hash.videos[27].req[0].nbRequest << endl;
     return (0);
 }

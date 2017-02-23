@@ -13,7 +13,7 @@ public:
     int         nbRequest;
     Endpoint    endpoint;
 public:
-    Request(int nbRequest, Endpoint &endpoint) : nbRequest(nbRequest), endpoint(endpoint) {}
+    Request(int videoId, int nbRequest, Endpoint &endpoint) : videoId(videoId), nbRequest(nbRequest), endpoint(endpoint) {}
     virtual ~Request() {}
 };
 
