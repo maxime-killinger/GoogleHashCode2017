@@ -14,6 +14,10 @@ using namespace std;
 class                   Hash {
 public:
     int                 cacheCapacity;
+    int                 nbVideos;
+    int                 nbEndpoints;
+    int                 nbRequests;
+    int                 nbCaches;
     vector<Video>       videos;
     vector<Cache>       cache;
     vector<Endpoint>    endpoints;
