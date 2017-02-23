@@ -130,17 +130,58 @@ int getInfos(Hash &hash) {
     getVideos(hash, buff);
     getEndpoints(hash, file);
     getRequests(hash, file);
+    int i = 0;
+    while (i < hash.nbCaches) {
+        Cache   cache(i);
+        hash.cache.push_back(cache);
+        i++;
+    }
     file.close();
     return (0);
 }
 
+void myAlgo(Hash &hash) {
+    int i = 0;
+    int k;
+    int j;
+    bool full;
+
+    while (i < hash.videos.size()) {
+        k = 0;
+        while (k < hash.videos[i].req.size()) {
+            j = 0;
+            full = false;
+            while (j < hash.videos[i].req[k].endpoint.nbCache) {
+                if (!full && hash.cache[hash.videos[i].req[k].endpoint.cacheLatency[j].idCache].size >= hash.videos[i].size) {
+                    hash.cache[hash.videos[i].req[k].endpoint.cacheLatency[j].idCache].videos.push_back(hash.videos[i]);
+                    full = true;
+                }
+                j++;
+            }
+            k++;
+        }
+        i++;
+    }
+}
+
 int main() {
     Hash        hash;
+    int i, j;
 
     getInfos(hash);
-    cout << hash.cacheCapacity << endl;
-    cout << hash.videos[1].id << ": " << hash.videos[1].size << " mb" << endl;
-    cout << hash.endpoints[4].latency << " " << hash.endpoints[4].nbCache << endl;
-    cout << hash.videos[27].req[0].endpoint.latency << " " << hash.videos[27].req[0].nbRequest << endl;
+    myAlgo(hash);
+    cout << hash.nbCaches << endl;
+    i = 0;
+    while (i < hash.cache.size()) {
+        j = 0;
+        cout << hash.cache[i].id;
+        while (j < hash.cache[i].videos.size()) {
+            cout << " ";
+            cout << hash.cache[i].videos[j].id;
+            j++;
+        }
+        cout << endl;
+        i++;
+    }
     return (0);
 }

@@ -12,6 +12,7 @@ using namespace std;
 class               Cache {
 public:
     int             id;
+    int             size;
     vector<Video>   videos;
 public:
     Cache(int id) : id(id) {}
