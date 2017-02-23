@@ -20,7 +20,6 @@ int                             main(int  ac, char **av)
     {
         istringstream      iss(buff);
         string             token;
-
         while (getline(iss, token, ' '))
         {
             cout << token << endl;
