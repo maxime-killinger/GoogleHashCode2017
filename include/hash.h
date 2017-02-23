@@ -24,7 +24,6 @@ public:
 public:
     Hash() {}
     virtual ~Hash() {}
-
 };
 
 #endif //GOOGLEHASHCODE2017_HASH_H

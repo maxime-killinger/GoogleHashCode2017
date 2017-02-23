@@ -6,20 +6,12 @@
 #define GOOGLEHASHCODE2017_LATENCY_H
 
 class           Latency {
-private:
+public:
     int         idCache;
     int         latency;
 public:
     Latency(int idCache, int latency) : idCache(idCache), latency(latency) {}
     virtual ~Latency() {}
-
-    int getIdCache() const {
-        return idCache;
-    }
-
-    int getLatency() const {
-        return latency;
-    }
 };
 
 #endif //GOOGLEHASHCODE2017_LATENCY_H

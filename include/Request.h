@@ -8,25 +8,13 @@
 #include "Endpoint.h"
 
 class           Request {
-private:
+public:
     int         videoId;
     int         nbRequest;
     Endpoint    endpoint;
 public:
     Request(int nbRequest, Endpoint &endpoint) : nbRequest(nbRequest), endpoint(endpoint) {}
     virtual ~Request() {}
-
-    int getVideoId() const {
-        return videoId;
-    }
-
-    int getNbRequest() const {
-        return nbRequest;
-    }
-
-    Endpoint &getEndpoint() const {
-        return endpoint;
-    }
 };
 
 #endif //GOOGLEHASHCODE2017_REQUEST_H

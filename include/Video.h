@@ -11,12 +11,12 @@
 using namespace std;
 
 class               Video {
-private:
+public:
     int             id;
     int             size;
     vector<Request> req;
 public:
-    Video(int size) : size(size) {}
+    Video(int id, int size) : id(id), size(size) {}
     virtual ~Video() {}
 };
 

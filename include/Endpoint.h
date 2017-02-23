@@ -11,30 +11,14 @@
 using namespace std;
 
 class           Endpoint {
-private:
+public:
     int             id;
     int             nbCache;
     int             latency;
     vector<Latency> cacheLatency;
 public:
-    Endpoint(int id, int nbCache, int latency) : id(id), nbCache(nbCache), latency(latency) {}
+    Endpoint(int id, int latency, int nbCache) : id(id), nbCache(nbCache), latency(latency) {}
     virtual ~Endpoint() {}
-
-    int getId() const {
-        return id;
-    }
-
-    int getNbCache() const {
-        return nbCache;
-    }
-
-    int getLatency() const {
-        return latency;
-    }
-
-    vector<Latency> &getCacheLatency() const {
-        return cacheLatency;
-    }
 };
 
 #endif //GOOGLEHASHCODE2017_ENDPOINT_H

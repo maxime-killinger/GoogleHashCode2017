@@ -10,7 +10,7 @@
 using namespace std;
 
 class               Cache {
-private:
+public:
     int             id;
     vector<Video>   videos;
 public:
