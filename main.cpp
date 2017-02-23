@@ -117,7 +117,7 @@ void    getRequests(Hash &hash, ifstream &file) {
 }
 
 int getInfos(Hash &hash) {
-    ifstream                    file("../GoogleFiles/me_at_the_zoo.in", ios::in);
+    ifstream                    file("../GoogleFiles/trending_today.in", ios::in);
     string                      buff;
 
     if (!file) {
@@ -167,20 +167,21 @@ void myAlgo(Hash &hash) {
 int main() {
     Hash        hash;
     int i, j;
+    ofstream fichier("trendin_today.out", ios::out | ios::trunc);
 
     getInfos(hash);
     myAlgo(hash);
-    cout << hash.nbCaches << endl;
+    fichier << hash.nbCaches << endl;
     i = 0;
     while (i < hash.cache.size()) {
         j = 0;
-        cout << hash.cache[i].id;
+        fichier << hash.cache[i].id;
         while (j < hash.cache[i].videos.size()) {
-            cout << " ";
-            cout << hash.cache[i].videos[j].id;
+            fichier << " ";
+            fichier << hash.cache[i].videos[j].id;
             j++;
         }
-        cout << endl;
+        fichier << endl;
         i++;
     }
     return (0);
