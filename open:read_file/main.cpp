@@ -5,22 +5,28 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
-int main()
+int                             main(int  ac, char **av)
 {
-    ifstream file("file.in", ios::in);
-    if(file)
-    {
-        string buff;
-        getline(file, buff);
-        cout << buff;
-        fichier.close();
-    }
-    else
-        cerr << "File not found" << endl;
+    ifstream                    file(av[1], ios::in);
+    string                      buff;
 
-    return 0;
+    if (!file)
+        return (-1);
+    while (getline(file, buff))
+    {
+        istringstream      iss(buff);
+        string             token;
+
+        while (getline(iss, token, ' '))
+        {
+            cout << token << endl;
+        }
+    }
+    file.close();
+    return (0);
 }
 
