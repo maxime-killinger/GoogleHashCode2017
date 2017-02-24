@@ -3,186 +3,150 @@
 #include <sstream>
 #include "include/hash.h"
 
+#define PATH_FILE_IN "../GoogleFiles/trending_today.in"
+#define PATH_FILE_OUT "../trending_today.out"
+
 using namespace std;
 
-void getFirstLine(Hash &hash, string buff) {
-    int                         i = 0;
+void                            getFirstLine(Hash &hash, string buff) {
     string                      token;
-
     istringstream               iss(buff);
-    while (getline(iss, token, ' '))
-    {
-        if (i == 0)
-            hash.nbVideos = atoi(token.c_str());
-        if (i == 1)
-            hash.nbEndpoints = atoi(token.c_str());
-        if (i == 2)
-            hash.nbRequests = atoi(token.c_str());
-        if (i == 3)
-            hash.nbCaches = atoi(token.c_str());
-        if (i == 4)
-            hash.cacheCapacity = atoi(token.c_str());
-        i++;
-    }
+
+    for (int i = 0; getline(iss, token, ' '); i++)
+        (i == 0) ? hash.nbVideos = atoi(token.c_str()) :
+        (i == 1) ? hash.nbEndpoints = atoi(token.c_str()) :
+        (i == 2) ? hash.nbRequests = atoi(token.c_str()) :
+        (i == 3) ? hash.nbCaches = atoi(token.c_str()) :
+        (i == 4) ? hash.cacheCapacity = atoi(token.c_str()) : 0;
 }
 
-void    getVideos(Hash &hash, string buff) {
-    int                         i = 0;
+void                            getVideos(Hash &hash, string buff) {
     string                      token;
-
     istringstream               iss(buff);
-    while (getline(iss, token, ' '))
-    {
-        Video   video(i, atoi(token.c_str()));
+
+    for (int i = 0; getline(iss, token, ' '); i++) {
+        Video                   video(i, atoi(token.c_str()));
+
         hash.videos.push_back(video);
-        i++;
     }
 }
 
-void    getCacheLatency(Endpoint &endpoint, ifstream &file) {
-    int                         k = 0;
-    int                         lat, idCache, i;
+void                            getCacheLatency(Endpoint &endpoint, ifstream &file) {
+    int                         lat, idCache;
     string                      token;
     string                      buff;
 
-    while (k < endpoint.nbCache) {
+    for (int k = 0; k < endpoint.nbCache; k++) {
         getline(file, buff);
-        istringstream iss(buff);
-        i = 0;
-        while (getline(iss, token, ' ')) {
-            if (i == 0) {
-                idCache = atoi(token.c_str());
-            }
-            if (i == 1) {
-                lat = atoi(token.c_str());
-            }
-            i++;
-        }
-        Latency     latency(idCache, lat);
+        istringstream           iss(buff);
+
+        for (int i = 0; getline(iss, token, ' '); i++)
+            (i == 0) ? idCache = atoi(token.c_str()) :
+            (i == 1) ? lat = atoi(token.c_str()) : 0;
+
+        Latency                 latency(idCache, lat);
         endpoint.cacheLatency.push_back(latency);
-        k++;
     }
 }
 
-void    getEndpoints(Hash &hash, ifstream &file) {
-    int                         k = 0;
-    int                         latency, nbCache, i;
+void                            getEndpoints(Hash &hash, ifstream &file) {
+    int                         latency, nbCache;
     string                      token;
     string                      buff;
 
-    while (k < hash.nbEndpoints) {
+    for (int k = 0; k < hash.nbEndpoints; k++) {
         getline(file, buff);
-        istringstream iss(buff);
-        i = 0;
-        while (getline(iss, token, ' ')) {
-            if (i == 0) {
-                latency = atoi(token.c_str());
-            }
-            if (i == 1) {
-                nbCache = atoi(token.c_str());
-            }
-            i++;
-        }
-        Endpoint    endpoint(k, latency, nbCache);
+        istringstream           iss(buff);
+
+        for (int i = 0; getline(iss, token, ' '); i++)
+            (i == 0) ? latency = atoi(token.c_str()) :
+            (i == 1) ? nbCache = atoi(token.c_str()) : 0;
+
+        Endpoint                endpoint(k, latency, nbCache);
+
         getCacheLatency(endpoint, file);
         hash.endpoints.push_back(endpoint);
-        k++;
     }
 }
 
 void    getRequests(Hash &hash, ifstream &file) {
-    int                         i = 0;
     int                         idVideo, idEndpoint, nbReq;
     string                      token;
     string                      buff;
 
     while (getline(file, buff)) {
-        istringstream iss(buff);
-        i = 0;
-        while (getline(iss, token, ' ')) {
-            if (i == 0) {
-                idVideo = atoi(token.c_str());
-            }
-            if (i == 1) {
-                idEndpoint = atoi(token.c_str());
-            }
-            if (i == 2) {
-                nbReq = atoi(token.c_str());
-            }
-            i++;
-        }
-        Request request(idVideo, nbReq, hash.endpoints[idEndpoint]);
+        istringstream           iss(buff);
+
+        for (int i = 0; getline(iss, token, ' '); i++)
+            (i == 0) ? idVideo = atoi(token.c_str()) :
+            (i == 1) ? idEndpoint = atoi(token.c_str()) :
+            (i == 2) ? nbReq = atoi(token.c_str()) : 0;
+
+        Request                 request(idVideo, nbReq, hash.endpoints[idEndpoint]);
+
         hash.videos[idVideo].req.push_back(request);
     }
 }
 
-int getInfos(Hash &hash) {
-    ifstream                    file("../GoogleFiles/trending_today.in", ios::in);
+int                             getInfos(Hash &hash) {
+    ifstream                    file(PATH_FILE_IN, ios::in);
     string                      buff;
 
     if (!file) {
         cout << "Error opening file" << endl;
-        return (1);
+        return (-1);
     }
+
     getline(file, buff);
     getFirstLine(hash, buff);
     getline(file, buff);
     getVideos(hash, buff);
     getEndpoints(hash, file);
     getRequests(hash, file);
-    int i = 0;
-    while (i < hash.nbCaches) {
-        Cache   cache(i);
+
+    for (int i = 0; i < hash.nbCaches; i++) {
+        Cache                   cache(i);
+
         hash.cache.push_back(cache);
-        i++;
     }
+
     file.close();
     return (0);
 }
 
-void myAlgo(Hash &hash) {
-    int i = 0;
-    int k;
-    int j;
-    bool full;
+void                            myAlgo(Hash &hash) {
 
-    while (i < hash.videos.size()) {
-        k = 0;
-        while (k < hash.videos[i].req.size()) {
-            j = 0;
-            full = false;
-            while (j < hash.videos[i].req[k].endpoint.nbCache) {
+    for (int i = 0; i < hash.videos.size(); i++) {
+
+        for (int k = 0; k < hash.videos[i].req.size(); k++) {
+            bool                full = false;
+
+            for (int j = 0; j < hash.videos[i].req[k].endpoint.nbCache; j++) {
+
                 if (!full && hash.cache[hash.videos[i].req[k].endpoint.cacheLatency[j].idCache].size >= hash.videos[i].size) {
                     hash.cache[hash.videos[i].req[k].endpoint.cacheLatency[j].idCache].videos.push_back(hash.videos[i]);
                     full = true;
                 }
-                j++;
             }
-            k++;
         }
-        i++;
     }
 }
 
-int main() {
-    Hash        hash;
-    int i, j;
-    ofstream fichier("trendin_today.out", ios::out | ios::trunc);
+int                             main() {
+    Hash                        hash;
+    ofstream                    file(PATH_FILE_OUT, ios::out | ios::trunc);
 
     getInfos(hash);
     myAlgo(hash);
-    fichier << hash.nbCaches << endl;
-    i = 0;
-    while (i < hash.cache.size()) {
-        j = 0;
-        fichier << hash.cache[i].id;
-        while (j < hash.cache[i].videos.size()) {
-            fichier << " ";
-            fichier << hash.cache[i].videos[j].id;
-            j++;
-        }
-        fichier << endl;
-        i++;
+    file << hash.nbCaches << endl;
+
+    for (int i = 0; i < hash.cache.size(); i++) {
+        file << hash.cache[i].id;
+
+        for (int j = 0; j < hash.cache[i].videos.size(); j++)
+            file << " " << hash.cache[i].videos[j].id;
+
+        file << endl;
     }
     return (0);
 }
