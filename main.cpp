@@ -3,8 +3,8 @@
 #include <sstream>
 #include "include/hash.h"
 
-#define PATH_FILE_IN "../GoogleFiles/trending_today.in"
-#define PATH_FILE_OUT "../trending_today.out"
+#define PATH_FILE_IN "./GoogleFiles/trending_today.in"
+#define PATH_FILE_OUT "./trending_today.out"
 
 using namespace std;
 
