@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "include/hash.h"
+#include "include/Hash.h"
 
 #define PATH_FILE_IN "./GoogleFiles/trending_today.in"
 #define PATH_FILE_OUT "./trending_today.out"
