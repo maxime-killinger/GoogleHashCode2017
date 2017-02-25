@@ -132,12 +132,10 @@ void                            myAlgo(Hash &hash) {
     }
 }
 
-int                             main() {
-    Hash                        hash;
+void                            display(Hash hash)
+{
     ofstream                    file(PATH_FILE_OUT, ios::out | ios::trunc);
 
-    getInfos(hash);
-    myAlgo(hash);
     file << hash.nbCaches << endl;
 
     for (int i = 0; i < hash.cache.size(); i++) {
@@ -148,5 +146,13 @@ int                             main() {
 
         file << endl;
     }
+}
+
+int                             main() {
+    Hash                        hash;
+
+    getInfos(hash);
+    myAlgo(hash);
+    display(hash);
     return (0);
 }
